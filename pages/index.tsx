@@ -1,9 +1,8 @@
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-
+import { useMovieDetail, useMovieList } from "@/src/api";
 
 export default function Home() {
-  return (
-   <div className='bg-green'>sjdfjsdjfh</div>
-  )
+  const { data } = useMovieList({ page: 1 });
+  const { data: d } = useMovieDetail({ movie_id: "125" });
+
+  return null;
 }
