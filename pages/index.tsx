@@ -1,4 +1,5 @@
 import {useMovieList} from '@/src/api';
+import {Icon, Spinner} from '@/src/components/Icon';
 import FlatList from 'flatlist-react';
 import Link from 'next/link';
 import {useLayoutEffect, useRef, useState} from 'react';
@@ -6,28 +7,47 @@ import {useLayoutEffect, useRef, useState} from 'react';
 export default function Home() {
 	const ref = useRef<HTMLDivElement>(null);
 	const [height, setHeight] = useState(0);
-	const {hasNextPage, fetchNextPage, dataMapped = []} = useMovieList({page: 1});
+	const [query_term, setQueryTerm] = useState('');
+	const {
+		lastPage,
+		hasNextPage,
+		fetchNextPage,
+		dataMapped = [],
+	} = useMovieList({page: 1, query_term});
+
+	const {movie_count, showing} = lastPage ?? {};
 
 	function fetchMoreData() {
 		if (hasNextPage) fetchNextPage();
+	}
+
+	function onSearch(search: string) {
+		typingDebounce(() => {
+			setQueryTerm(search);
+		});
 	}
 
 	useLayoutEffect(() => {
 		if (ref.current && ref.current.clientHeight) {
 			setHeight(ref.current.clientHeight);
 		}
-	}, []);
+	});
 
 	return (
 		<div className="relative flex flex-col flex-1 p-[12.5pt]">
-			<div className="flex items-center gap-2 bg-gray-100 z-10 rounded-xl px-4 py-2 border mb-4">
-				<div>o</div>
+			<div className="flex items-center gap-2 bg-gray-100 z-10 rounded-xl px-4 py-2 border">
+				<Icon name="faMagnifyingGlass" />
 				<input
+					onChange={e => onSearch(e.target.value)}
 					placeholder="Input movie title !"
 					className="bg-gray-100 w-full h-5 outline-none"
 				/>
 			</div>
+
+			<div className="text-center my-4">{`Showing ${showing} of ${movie_count}`}</div>
+
 			<div ref={ref} className="flex-1" />
+
 			<div
 				style={{height}}
 				className="flex flex-col relative overflow-hidden overflow-y-auto gap-[12.5pt]">
@@ -37,9 +57,9 @@ export default function Home() {
 					renderItem={movie => {
 						const {
 							id,
-							imdb_code,
 							rating,
-							title,
+							imdb_code,
+							title_english: title,
 							large_cover_image: medium_cover_image,
 						} = movie;
 						return (
@@ -65,7 +85,7 @@ export default function Home() {
 						hasMore: !!hasNextPage,
 						loadMore: fetchMoreData,
 						loadingIndicatorPosition: 'center',
-						loadingIndicator: <div className="text-center">Loading...</div>,
+						loadingIndicator: <Spinner className="text-xl" />,
 					}}
 				/>
 			</div>

@@ -3,10 +3,11 @@ import axios from 'axios';
 import {
 	ApiResponse,
 	MovieDetailParams,
+	MovieDetailResponse,
 	MovieListParams,
 	MovieListResponse,
 } from './api.type';
-import {Movie, MovieDetail} from './app.type';
+import {Movie} from './app.type';
 
 async function baseAPI<Res>(path: string, params: object) {
 	const host = 'https://yts.mx/api/v2';
@@ -51,12 +52,26 @@ export function useMovieList(params: MovieListParams) {
 		dataMapped,
 		get lastPage() {
 			const {
+				movies,
 				movie_count = 0,
-				page_number,
+				page_number = 0,
 				limit: pageLimit = 0,
 			} = query.data?.pages.slice().pop()?.data ?? {};
 			const totalPage = Math.ceil(movie_count / pageLimit);
-			return {totalPage, page_number, movie_count};
+
+			const totalMovies = movies?.length ?? 0;
+
+			return {
+				totalPage,
+				page_number,
+				movie_count,
+				limit: pageLimit,
+				get showing() {
+					const show = (page_number - 1) * limit + totalMovies;
+					if (show < 0) return 0;
+					return show;
+				},
+			};
 		},
 	};
 }
@@ -64,7 +79,7 @@ export function useMovieList(params: MovieListParams) {
 export function useMovieDetail(params: Pick<MovieDetailParams, 'movie_id'>) {
 	return useQuery([JSON.stringify(params)], {
 		queryFn() {
-			return baseAPI<MovieDetail>('/movie_details.json', {
+			return baseAPI<MovieDetailResponse>('/movie_details.json', {
 				...params,
 				with_cast: true,
 				with_images: true,
