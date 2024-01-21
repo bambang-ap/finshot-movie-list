@@ -72,15 +72,15 @@ export interface MovieListResponse {
   /**
    * The total movie count results for your query	2131
    */
-  movie_count?: string;
+  movie_count?: number;
   /**
    * The limit of results per page that has been set	20
    */
-  limit?: string;
+  limit?: number;
   /**
    * The current page number you are viewing	1
    */
-  page_number?: string;
+  page_number?: number;
   /**
    * An array which will hold multiple movies and their relative information	ARRAY
    */
