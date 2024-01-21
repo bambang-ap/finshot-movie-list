@@ -1,10 +1,10 @@
-import { Movie } from "./app.type";
+import { Movie } from './app.type';
 
 export interface ApiResponse<T> {
   status: string;
   status_message: string;
   data: T;
-  "@meta": {
+  '@meta': {
     server_time: number;
     server_timezone: string;
     api_version: number;
@@ -27,7 +27,7 @@ export interface MovieListParams {
    * Used to filter by a given quality
    * @default All
    */
-  quality?: "All" | "480p" | "720p" | "1080p" | "1080p.x265" | "2160p" | "3D";
+  quality?: 'All' | '480p' | '720p' | '1080p' | '1080p.x265' | '2160p' | '3D';
   /**
    * Used to filter movie by a given minimum IMDb rating
    * @default 0
@@ -48,19 +48,19 @@ export interface MovieListParams {
    * @default date_added
    */
   sort_by?:
-    | "title"
-    | "year"
-    | "rating"
-    | "peers"
-    | "seeds"
-    | "download_count"
-    | "like_count"
-    | "date_added";
+    | 'title'
+    | 'year'
+    | 'rating'
+    | 'peers'
+    | 'seeds'
+    | 'download_count'
+    | 'like_count'
+    | 'date_added';
   /**
    * Orders the results by either Ascending or Descending order
    * @default desc
    */
-  order_by?: "desc" | "asc";
+  order_by?: 'desc' | 'asc';
   /**
    * Returns the list with the Rotten Tomatoes rating included
    * @default false

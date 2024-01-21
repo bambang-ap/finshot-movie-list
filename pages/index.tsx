@@ -14,8 +14,7 @@ export default function Home() {
 
 	useLayoutEffect(() => {
 		if (ref.current && ref.current.clientHeight) {
-			const height = ref.current.clientHeight;
-			setHeight(height);
+			setHeight(ref.current.clientHeight);
 		}
 	}, []);
 
@@ -30,7 +29,7 @@ export default function Home() {
 			</div>
 			<div ref={ref} className="flex-1" />
 			<div
-				style={{height: height}}
+				style={{height}}
 				className="flex flex-col relative overflow-hidden overflow-y-auto gap-[12.5pt]">
 				<FlatList
 					list={dataMapped}
