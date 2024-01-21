@@ -59,7 +59,7 @@ function RenderMovieDetail({movie_id}: {movie_id: string}) {
 	});
 
 	return (
-		<div ref={ref} className="flex flex-col gap-2">
+		<div ref={ref} className="flex flex-col gap-2 overflow-auto">
 			<div className="flex items-center px-[12.5pt] py-4 border-0 border-b-2">
 				<Icon
 					className="cursor-pointer"
