@@ -12,9 +12,11 @@ export default function Home() {
 		lastPage,
 		hasNextPage,
 		fetchNextPage,
+		isFetching,
 		dataMapped = [],
 	} = useMovieList({page: 1, query_term});
 
+	const isSearching = isFetching && !!query_term;
 	const {movie_count, showing} = lastPage ?? {};
 
 	function fetchMoreData() {
@@ -42,6 +44,7 @@ export default function Home() {
 					placeholder="Input movie title !"
 					className="bg-gray-100 w-full h-5 outline-none"
 				/>
+				{isSearching && <Spinner />}
 			</div>
 
 			<div className="text-center my-4">{`Showing ${showing} of ${movie_count}`}</div>

@@ -1,7 +1,8 @@
 import {useMovieDetail} from '@/src/api';
 import {Icon} from '@/src/components/Icon';
+import {useTicker} from '@/src/hooks/useTicker';
 import {useRouter} from 'next/router';
-import {ReactNode, useLayoutEffect, useRef, useState} from 'react';
+import {ReactNode, useEffect, useLayoutEffect, useRef, useState} from 'react';
 
 export default function MovieDetail() {
 	const router = useRouter();
@@ -35,9 +36,21 @@ function RenderMovieDetail({movie_id}: {movie_id: string}) {
 		key.includes('large_screenshot'),
 	);
 
+	const tick = useTicker(screenshots.length > 0);
+
 	function goToScreenshot(index: number) {
 		setCurrentIdx(index);
 	}
+
+	useEffect(() => {
+		if (tick % 5 === 0) {
+			setCurrentIdx(index => {
+				const idx = index + 1;
+				if (idx >= screenshots.length) return 0;
+				return idx;
+			});
+		}
+	}, [tick]);
 
 	useLayoutEffect(() => {
 		if (ref.current && ref.current.clientWidth) {
@@ -86,11 +99,11 @@ function RenderMovieDetail({movie_id}: {movie_id: string}) {
 			</div>
 
 			<div className="px-[12.5pt]">
-				<div className="flex gap-2">
+				<div className="flex gap-4">
 					<Details title="Year" detail={year} />
 					<Details title="Rating" detail={rating} />
 				</div>
-				<div className="flex gap-2">
+				<div className="flex gap-4">
 					<Details title="Runtime" detail={runtime} />
 					<Details title="Language" detail={language} />
 				</div>
